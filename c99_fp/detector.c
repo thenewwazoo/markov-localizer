@@ -383,7 +383,7 @@ normalize_dist(
  * void detector_find_max_prob - find the highest probability value in the distribution
  *
  * arguments: float prob_dist[]      - probability distrubution
- *            size_t num_tooth_tips - number of possible locations
+ *            size_t num_tooth_tips  - number of possible locations
  *            float* max_prob        - value of the highest probability bin
  *            uint8_t* max_bin       - index of the highest probability bin
  *  returns: nothing
@@ -409,4 +409,26 @@ detector_find_max_prob(
             *max_bin = i;
         }
     }
+}
+
+/*
+ * size_t count_tooth_posns - Get the number of divisions based on the tooth map
+ *
+ * arguments: size_t num_tooth_tips - number of possible positions
+ *            uint8_t* tooth_dists  - distance between teeth
+ * returns: uint8_t number of flywheel divisions
+ * side-effects: none
+ */
+
+size_t count_tooth_posns(
+        uint8_t num_tooth_tips,
+        uint8_t tooth_dists[const]
+        )
+{
+    uint8_t num_tooth_posns = 0;
+
+    for (size_t i = 0; i < num_tooth_tips; i++)
+        num_tooth_posns += tooth_dists[i];
+
+    return num_tooth_posns;
 }

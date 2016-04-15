@@ -92,14 +92,11 @@ int main()
 
     uint8_t tooth_dists[] = TEST_TOOTH_MAP;
     const size_t num_tooth_tips = sizeof(tooth_dists)/sizeof(tooth_dists[0]); /* len(tooth_dists) */
-    uint8_t num_tooth_posns = 0;
+    uint8_t num_tooth_posns = count_tooth_posns(num_tooth_tips, tooth_dists);
     float tooth_prob[num_tooth_tips];
     uint32_t sample_rate = TEST_SAMPLE_RATE;
     float max_accel = TEST_MAX_ACCEL;
     float error_rate = TEST_ERROR_RATE;
-
-    for (size_t i = 0; i < num_tooth_tips; i++)
-        num_tooth_posns += tooth_dists[i];
 
     Detector d;
 

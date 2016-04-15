@@ -82,3 +82,8 @@ detector_calc_accel(
         const uint8_t  t0_teeth,
         const uint32_t t1_ticks,
         const uint8_t  t1_teeth);
+
+/* Count up the number of flywheel divisions (teeth + gaps) */
+size_t count_tooth_posns(
+        uint8_t num_tooth_tips,
+        uint8_t tooth_dists[const]);
