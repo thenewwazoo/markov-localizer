@@ -43,6 +43,13 @@ detector_init(
         const float max_accel,
         const float error_rate);
 
+/* Execute a localization loop */
+void
+detector_interrupt(
+        uint32_t const volatile * const timer_register,
+        Detector* d
+        );
+
 /* Execute a probabalistic 1-position move */
 void
 detector_move(
@@ -84,6 +91,7 @@ detector_calc_accel(
         const uint8_t  t1_teeth);
 
 /* Count up the number of flywheel divisions (teeth + gaps) */
-size_t count_tooth_posns(
+size_t
+count_tooth_posns(
         uint8_t num_tooth_tips,
         uint8_t tooth_dists[const]);
