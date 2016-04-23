@@ -48,7 +48,7 @@ int main()
     for (size_t i = start_tick; i < num_ticks + start_tick; i++)
     {
         timer_register = sample_engine_ticks[i];
-        detector_interrupt(&timer_register, &d);
+        detector_interrupt(timer_register, &d);
         if (d.has_sync)
             printf("+");
         else

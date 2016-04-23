@@ -46,7 +46,7 @@ detector_init(
 /* Execute a localization loop */
 void
 detector_interrupt(
-        uint32_t const volatile * const timer_register,
+        uint32_t timer_register,
         Detector* d
         );
 

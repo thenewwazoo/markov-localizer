@@ -33,7 +33,7 @@ detector_init(
 
 void
 detector_interrupt(
-        uint32_t const volatile * const timer_register,
+        uint32_t timer_register,
         Detector* d
         );
 
@@ -135,17 +135,17 @@ detector_init(
 
 /* void detector_interrupt - execute a localization loop on the detector
  *
- * arguments: uint32_t timer_register - pointer to the timer register
+ * arguments: uint32_t timer_register - value of the timer register
  *            Detetor* d              - the detector we're operating on
  * returns: nothing
  * side-effects: modifies d
  */
 void
 detector_interrupt(
-        uint32_t const volatile * const timer_register,
+        uint32_t timer_register,
         Detector* d)
 {
-    uint32_t timer = *timer_register;
+    uint32_t timer = timer_register;
     float prob_dist_tmp[d->num_tooth_tips];
     float prediction_accel;
     uint8_t previous_tooth = d->current_tooth;
