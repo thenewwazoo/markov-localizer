@@ -6,7 +6,10 @@
 #include <stddef.h>
 
 #include "detector.h"
+
+#ifdef DEBUG
 #include "debug_print.h"
+#endif
 
 
 /* Macros */
@@ -238,7 +241,9 @@ detector_locate(
     float prob_storage[num_tooth_tips];
     float accel[num_tooth_tips]; /* scratch space */
 
+#ifdef DEBUG
     debug_print_prob_dist_f(prior, num_tooth_tips, "detector_locate() :prior", "%2.1f");
+#endif
 
     /* Unroll this loop a tiny bit to avoid doing math to work around around
      * the edge of the array at every iteration. */
@@ -251,12 +256,16 @@ detector_locate(
         prob_storage[i] = prob_of_move(prior[i], max_accel, accel[i], error_rate);
     }
 
+#ifdef DEBUG
     debug_print_prob_dist_f(accel, num_tooth_tips, "detector_locate() : accel_map", "%2.1f");
     debug_print_prob_dist_f(prob_storage, num_tooth_tips, "detector_locate() : prob_storage", "%2.1f");
+#endif
 
     normalize_dist(prob_storage, num_tooth_tips, posterior);
 
+#ifdef DEBUG
     debug_print_prob_dist_f(posterior, num_tooth_tips, "detector_locate() : normalized", "%2.1f");
+#endif
 
     return;
 }
@@ -285,15 +294,19 @@ detector_move(
     float misses[num_tooth_tips];
     float   hits[num_tooth_tips];
 
+#ifdef DEBUG
     debug_print_prob_dist_f(prior, num_tooth_tips, "detector_move() : prior", "%2.1f");
+#endif
     for (size_t i = 0; i < num_tooth_tips; i++)
     {
         misses[i] = error_rate / 2 * prior[i];
         hits[i]   = (1 - error_rate) * prior[i];
     }
 
+#ifdef DEBUG
     debug_print_prob_dist_f(misses, num_tooth_tips, "detector_move() : misses", "%2.1f");
     debug_print_prob_dist_f(hits, num_tooth_tips, "detector_move() : hits", "%2.1f");
+#endif
 
     for (size_t i = 2; i < num_tooth_tips+2; i++)
     {
@@ -303,7 +316,9 @@ detector_move(
            + misses[ i%num_tooth_tips ];    /* move happened but was not detected                */
     }
 
+#ifdef DEBUG
     debug_print_prob_dist_f(posterior, num_tooth_tips, "detector_move() : posterior", "%2.1f");
+#endif
 
     return;
 }
