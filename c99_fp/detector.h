@@ -4,6 +4,7 @@ typedef struct {
     bool    has_sync;
     bool    phase;
     float   velocity;
+    float   last_acceleration;
 
     uint8_t  *tooth_dists;      // pointer to array containing tooth distances, e.g. { 2, 1, 1 }
     uint32_t ticks_per_sec;     // sample frequency of the detector's timer, in Hz

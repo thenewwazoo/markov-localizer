@@ -180,29 +180,32 @@ detector_interrupt(
             &(d->current_tooth)
             );
 
+    prediction_accel = detector_calc_accel(
+                                        d->ticks_per_sec,
+                                        d->num_tooth_posns,
+                                        d->previous_timer,
+                                        d->tooth_dists[previous_tooth],
+                                        timer,
+                                        d->tooth_dists[d->current_tooth]
+                                        );
+    d->last_acceleration = prediction_accel;
+
+    float fw_dist_rads = 2.0 * PI * (d->tooth_dists[d->current_tooth] / d->num_tooth_posns);
+    float timer_secs = timer / d->ticks_per_sec;
+    d->velocity = fw_dist_rads / timer_secs;
+
     if (d->confidence > 0.98) /* FIXME magic number */
     {
         d->has_sync = true;
     }
     else
     {
-        /* Confidence may have decayed due to many move()s, but the localization
-         * result is still correct, so we check the result for error and unset
-         * has_sync if we get something that's unlikely. */
 
-        prediction_accel = detector_calc_accel(
-                                            d->ticks_per_sec,
-                                            d->num_tooth_posns,
-                                            d->previous_timer,
-                                            d->tooth_dists[previous_tooth],
-                                            timer,
-                                            d->tooth_dists[d->current_tooth]
-                                            );
-        
+    /* Confidence may have decayed due to many move()s, but the localization
+     * result is still correct, so we check the result for error and unset
+     * has_sync if we get something that's unlikely. */
         if (fabsf(prediction_accel) > d->max_accel)
             d->has_sync = false;
-        else
-            d->velocity = d->tooth_dists[d->current_tooth] / (float)timer;
     }
 
     d->previous_timer = timer;
@@ -384,7 +387,7 @@ detector_calc_accel(
 {
     if (t0_ticks == 0)        /* infinite de/acceleration? */
         return FLT_MIN;       /* sure, if you say so       */
-    if (t1_ticks == 0) 
+    if (t1_ticks == 0)
         return FLT_MAX;
 
     float left_denom, right_denom, left_term, right_term;
