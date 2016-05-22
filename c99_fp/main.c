@@ -20,7 +20,7 @@ static volatile uint32_t timer_register;
 /* Definitions */
 int main()
 {
-    const uint32_t num_ticks = 32; /* Number of test samples to use during sim */
+    const uint32_t num_ticks = num_sample_engine_ticks; /* Number of test samples to use during sim */
     int start_tick = 0;
 
     uint8_t tooth_dists[] = TEST_TOOTH_MAP;
@@ -50,9 +50,10 @@ int main()
         timer_register = sample_engine_ticks[i];
         detector_interrupt(timer_register, &d);
         if (d.has_sync)
-            printf("+");
-        else
-            printf(".");
+        {
+            printf("Got sync in %lu", i);
+            break;
+        }
         debug_print_detector(&d);
     }
 
